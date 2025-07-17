@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && node server.js",
+    "client": "cd frontend && npm run dev:client",
+    "dev:client": "vite --port 3000"
+  },
+  "dependencies": {
+    "@adyen/adyen-web": "^6.19.0",
+    "@adyen/api-library": "^27.0.1",
+    "concurrently": "^9.2.0",
+    "dotenv": "^17.2.0",
+    "uuid": "^11.1.0"
+  }
+}
