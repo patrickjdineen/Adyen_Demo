@@ -1,30 +1,34 @@
 import { React, useRef, useEffect } from 'react';
 import { AdyenCheckout, Dropin, Card, Klarna, PayPal, GooglePay, ApplePay, Ach, Fastlane } from '@adyen/adyen-web';
 
+const apiUrl = 'http://localhost:3001'
 
 function Checkout({ cartItems, onBack }) {
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const adyenTotal = total*100
 
   //used in get session request and then to create the drop in. 
   const dropinRef = useRef(null)
 
     //use data from the cart page to hit /post/session on backend.
 
-
-const getSession = async () => {
+    const getSession = async () => {
+    alert('Creating a payment session with Adyen');
 
     let data, adyenGlobalConfig;
     const sessionRequestData = {
         amount: {
-            value : total,
+            value : adyenTotal,
+
+
             currency : 'USD'
         },
         returnUrl : 'http://localhost:3000'
     };
     
     try {
-        const response = await fetch ('http://localhost:3001/api/session', {
+        const response = await fetch (`${apiUrl}/api/session`, {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -35,8 +39,10 @@ const getSession = async () => {
             throw new Error(`Response status: ${response.status}`);
             }
         data = await response.json()
-        console.log(data)
-
+        if(data){
+          alert(` Session created succesfully! \n\n {\n    id : ${data.id},\n    sessionData : ${data.sessionData}\n}`)
+        }
+        
     } catch (error) {
         console.error('Error is: ',error)
     };
@@ -49,51 +55,49 @@ const getSession = async () => {
         billingAddressRequired: true // Show the billing address input fields and mark them as required.
         };
 */
-    const klarnaConfiguration = {
-        useKlarnaWidget: true // When set to true, the Klarna widget is shown. Set to false to initiate a redirect flow.
-    };
     const dropinConfiguration = {
         // Required if you import individual payment methods.
         paymentMethodComponents: [Card, GooglePay, PayPal, ApplePay, Klarna, Ach],
-        openFirstPaymentMethod : false,
+        openFirstPaymentMethod : true,
         showPaymentMethods : true,
-        paymentMethodsConfiguration : {
-            klarna: klarnaConfiguration,
-            klarna_account: klarnaConfiguration,
-            klarna_paynow: klarnaConfiguration
-        },
+
         // Optional configuration.
         //onReady: () => {},
         instantPaymentTypes: ['applepay', 'googlepay']
         };
 
+        adyenGlobalConfig = {
+            session : {
+                id : data.id,
+                sessionData : data.sessionData
+            },
+            amount : sessionRequestData.amount,
+            environment : 'TEST',
+            countryCode : 'US',
+            locale : 'en-US',
+            clientKey : data.clientKey,
+          //event handlers for payment responses
+            onPaymentCompleted: (result, component) => {
+              //alert(`Payment completed successfully with code ${result.resultCode}`)
+                console.info(result, component);
+            },
+            onPaymentFailed: (result, component) => {
+              alert(`Payment failed with code ${result.resultCode}`)
+                console.info(result, component);
+            },
+            onError: (error, component) => {
+                console.error(error.name, error.message, error.stack, component);
+            }
+        };
 
-    adyenGlobalConfig = {
-        session : {
-            id : data.id,
-            sessionData : data.sessionData
-        },
-        amount : sessionRequestData.amount,
-        environment : 'TEST',
-        countryCode : 'US',
-        locale : 'en-US',
-        clientKey : data.clientKey,
-        onPaymentCompleted: (result, component) => {
-            console.info(result, component);
-        },
-        onPaymentFailed: (result, component) => {
-            console.info(result, component);
-        },
-        onError: (error, component) => {
-            console.error(error.name, error.message, error.stack, component);
+        //create and mount dropin container using above objects
+        const checkout = await AdyenCheckout(adyenGlobalConfig);
+        if(checkout){
+          alert('Now creating Drop-in')
         }
+        const drop = new Dropin(checkout,dropinConfiguration).mount('#dropin-container');
     };
 
-    //create and mount dropin container using above objects
-    const checkout = await AdyenCheckout(adyenGlobalConfig);
-    const drop = new Dropin(checkout,dropinConfiguration).mount('#dropin-container');
-    };
-    
     getSession();
      
   return (

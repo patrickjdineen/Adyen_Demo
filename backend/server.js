@@ -18,6 +18,7 @@ const client = new Client({
         apiKey: process.env.ADYEN_API_KEY,
         environment: "TEST" 
     });
+  const checkoutApi = new CheckoutAPI(client);
 
 //adyen route
 app.post('/api/session', async (req, res) => {
@@ -36,7 +37,7 @@ app.post('/api/session', async (req, res) => {
           };
            
         // Send the request
-        const checkoutApi = new CheckoutAPI(client);
+        
         const response =  await checkoutApi.PaymentsApi.sessions(checkoutSessionData, { idempotencyKey: idempotencyKey });
         response.clientKey = process.env.CLIENT_KEY
         response.idempotencyKey = idempotencyKey
@@ -48,6 +49,19 @@ app.post('/api/session', async (req, res) => {
     }
 });
 
+app.post(`/sessions/:id`, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const sessionResult = req.query.sessionResult;
+
+    const response = await checkoutApi.PaymentsApi.getResultOfPaymentSession(id, sessionResult);
+    console.log(response)
+    res.status(201).json(response)
+  } catch (error) {
+    console.error(error)
+  }
+  
+});
 //route for filling product data
 app.get('/api/products', (req, res) => {
   res.json(products);
