@@ -9,6 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json())
 
+//function for creating idempotency keys and reference ids
 createId = () =>{
   return uuidv4();
 }
@@ -49,6 +50,8 @@ app.post('/api/session', async (req, res) => {
     }
 });
 
+//troubleshooting endpoint for failure response
+//not used currently
 app.post(`/sessions/:id`, async (req, res) => {
   try {
     const id = req.params.id;
@@ -62,6 +65,7 @@ app.post(`/sessions/:id`, async (req, res) => {
   }
   
 });
+
 //route for filling product data
 app.get('/api/products', (req, res) => {
   res.json(products);

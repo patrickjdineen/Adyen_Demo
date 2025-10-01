@@ -1,27 +1,23 @@
 import { React, useRef, useEffect } from 'react';
 import { AdyenCheckout, Dropin, Card, Klarna, PayPal, GooglePay, ApplePay, Ach, Fastlane } from '@adyen/adyen-web';
 
-const apiUrl = 'http://localhost:3001'
 
 function Checkout({ cartItems, onBack }) {
 
+  const apiUrl = 'http://localhost:3001'
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const adyenTotal = total*100
 
-  //used in get session request and then to create the drop in. 
+  //useRef for creating empty div for mounting drop in
   const dropinRef = useRef(null)
 
-    //use data from the cart page to hit /post/session on backend.
-
-    const getSession = async () => {
-    alert('Creating a payment session with Adyen');
+  //function to create session, ount drop in
+  const getSession = async () => {
 
     let data, adyenGlobalConfig;
     const sessionRequestData = {
         amount: {
             value : adyenTotal,
-
-
             currency : 'USD'
         },
         returnUrl : 'http://localhost:3000'
@@ -40,7 +36,7 @@ function Checkout({ cartItems, onBack }) {
             }
         data = await response.json()
         if(data){
-          alert(` Session created succesfully! \n\n {\n    id : ${data.id},\n    sessionData : ${data.sessionData}\n}`)
+          console.log(` Session created succesfully! \n\n {\n    id : ${data.id},\n    sessionData : ${data.sessionData}\n}`)
         }
         
     } catch (error) {
@@ -61,8 +57,7 @@ function Checkout({ cartItems, onBack }) {
         openFirstPaymentMethod : true,
         showPaymentMethods : true,
 
-        // Optional configuration.
-        //onReady: () => {},
+        onReady: () => {},
         instantPaymentTypes: ['applepay', 'googlepay']
         };
 
@@ -82,7 +77,7 @@ function Checkout({ cartItems, onBack }) {
                 console.info(result, component);
             },
             onPaymentFailed: (result, component) => {
-              alert(`Payment failed with code ${result.resultCode}`)
+              console.log(`Payment failed with code ${result.resultCode}`)
                 console.info(result, component);
             },
             onError: (error, component) => {
@@ -92,9 +87,6 @@ function Checkout({ cartItems, onBack }) {
 
         //create and mount dropin container using above objects
         const checkout = await AdyenCheckout(adyenGlobalConfig);
-        if(checkout){
-          alert('Now creating Drop-in')
-        }
         const drop = new Dropin(checkout,dropinConfiguration).mount('#dropin-container');
     };
 
