@@ -14,14 +14,11 @@ function Checkout({ cartItems, onBack }) {
     //use data from the cart page to hit /post/session on backend.
 
     const getSession = async () => {
-    alert('Creating a payment session with Adyen');
 
     let data, adyenGlobalConfig;
     const sessionRequestData = {
         amount: {
             value : adyenTotal,
-
-
             currency : 'USD'
         },
         returnUrl : 'http://localhost:3000'
@@ -39,13 +36,30 @@ function Checkout({ cartItems, onBack }) {
             throw new Error(`Response status: ${response.status}`);
             }
         data = await response.json()
-        if(data){
-          alert(` Session created succesfully! \n\n {\n    id : ${data.id},\n    sessionData : ${data.sessionData}\n}`)
-        }
-        
+        console.log('id is:' ,data.id)
+        console.log('sessionData is:', data.sessionData)
     } catch (error) {
         console.error('Error is: ',error)
     };
+
+    //get payment methods
+    try {
+      console.log('trying payment methods endpoint')
+      const response = await fetch(`${apiUrl}/api/paymentmethods`,{
+        method : 'POST',
+        headers : {
+                  'Content-Type' : 'application/json'
+              }
+      });
+              if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+            }
+        paymentData = await response.json()
+        console.log('payment methods data is:', paymentData)
+
+    } catch (error) {
+      console.error(error)
+    }
 
     //all config objects for dropin
     /*
@@ -92,9 +106,7 @@ function Checkout({ cartItems, onBack }) {
 
         //create and mount dropin container using above objects
         const checkout = await AdyenCheckout(adyenGlobalConfig);
-        if(checkout){
-          alert('Now creating Drop-in')
-        }
+
         const drop = new Dropin(checkout,dropinConfiguration).mount('#dropin-container');
     };
 
