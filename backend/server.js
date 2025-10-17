@@ -6,7 +6,14 @@ const products = require('./products');
 const { Client, CheckoutAPI} = require("@adyen/api-library");
 
 const app = express();
-app.use(cors());
+
+// Enhanced CORS configuration for Codespaces
+app.use(cors({
+  origin: true, // Allow all origins in development
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json())
 
 createId = () =>{
@@ -114,12 +121,18 @@ app.post('/api/payment', async(req, res) =>{
   }
 })
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Backend server is running' });
+});
+
 //route for filling product data
 app.get('/api/products', (req, res) => {
   res.json(products);
 });
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server accessible from external connections on port ${PORT}`);
 }); 
