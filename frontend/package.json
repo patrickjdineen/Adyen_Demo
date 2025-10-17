@@ -3,11 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "react-scripts start",
-    "dev": "react-scripts start",
-    "dev:client": "PORT=3000 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test"
+    "start": "npx react-scripts start",
+    "dev": "npx react-scripts start",
+    "dev:client": "PORT=3000 npx react-scripts start",
+    "build": "npx react-scripts build",
+    "test": "npx react-scripts test"
   },
   "dependencies": {
     "@adyen/adyen-web": "^6.19.0",
@@ -26,5 +26,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.4"
   }
 }
