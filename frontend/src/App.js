@@ -12,7 +12,16 @@ function App() {
   const [checkout, setCheckout] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/products')
+    // Auto-detect API URL based on current location
+    const getApiUrl = () => {
+      if (window.location.hostname === 'localhost') {
+        return 'http://localhost:3001';
+      }
+      // For Codespaces or other environments, use the same hostname with port 3001
+      return `${window.location.protocol}//${window.location.hostname}:3001`;
+    };
+    
+    fetch(`${getApiUrl()}/api/products`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch products');
         return res.json();

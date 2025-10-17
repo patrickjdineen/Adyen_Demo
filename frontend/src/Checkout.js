@@ -1,7 +1,16 @@
 import { React, useRef, useEffect } from 'react';
 import { AdyenCheckout, Dropin, Card, Klarna, PayPal, GooglePay, ApplePay, Ach, Fastlane } from '@adyen/adyen-web';
 
-const apiUrl = 'http://localhost:3001'
+// Auto-detect API URL based on current location
+const getApiUrl = () => {
+  if (window.location.hostname === 'localhost') {
+    return 'http://localhost:3001';
+  }
+  // For Codespaces or other environments, use the same hostname with port 3001
+  return `${window.location.protocol}//${window.location.hostname}:3001`;
+};
+
+const apiUrl = getApiUrl();
 
 function Checkout({ cartItems, onBack }) {
 
@@ -20,7 +29,7 @@ function Checkout({ cartItems, onBack }) {
             value : adyenTotal,
             currency : 'USD'
         },
-        returnUrl : 'http://localhost:3000'
+        returnUrl : window.location.origin
     };
     
     try {
