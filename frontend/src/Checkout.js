@@ -11,8 +11,7 @@ function Checkout({ cartItems, onBack }) {
   //used in get session request and then to create the drop in. 
   const dropinRef = useRef(null)
 
-    //use data from the cart page to hit /post/session on backend.
-
+  useEffect(() => {
     const getSession = async () => {
 
     let data, adyenGlobalConfig;
@@ -43,6 +42,7 @@ function Checkout({ cartItems, onBack }) {
     };
 
     //get payment methods
+    let paymentData;
     try {
       console.log('trying payment methods endpoint')
       const response = await fetch(`${apiUrl}/api/paymentmethods`,{
@@ -111,6 +111,7 @@ function Checkout({ cartItems, onBack }) {
     };
 
     getSession();
+  }, [adyenTotal]);
      
   return (
     <div className="checkout-page">

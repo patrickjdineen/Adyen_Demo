@@ -3,7 +3,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd backend && node server.js",
     "client": "cd frontend && npm run dev:client",
-    "dev:client": "vite --port 3000"
+    "dev:client": "PORT=3000 react-scripts start"
   },
   "dependencies": {
     "@adyen/adyen-web": "^6.19.0",
