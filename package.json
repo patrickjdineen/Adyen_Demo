@@ -1,12 +1,13 @@
 {
+  "name": "adyen_ecommerce",
+  "private": true,
+  "version": "0.0.0",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd backend && node server.js",
-    "client": "cd frontend && npm run dev:client",
-    "dev:client": "PORT=3000 react-scripts start"
+    "client": "cd frontend && npm run dev:client"
   },
   "dependencies": {
-    "@adyen/adyen-web": "^6.19.0",
     "@adyen/api-library": "^27.0.1",
     "concurrently": "^9.2.0",
     "dotenv": "^17.2.0",

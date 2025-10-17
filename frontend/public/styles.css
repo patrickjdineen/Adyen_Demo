@@ -5,47 +5,12 @@ body {
   margin: 0;
   padding: 0;
 }
-#root {
+
+#app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
 
 .product-list {
@@ -53,12 +18,39 @@ body {
   margin: 2rem auto;
   padding: 1rem;
 }
+
+.product-list header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.product-list header h1 {
+  margin: 0;
+}
+
+.product-list header button {
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.product-list header button:hover {
+  background: #0056b3;
+}
+
 .products {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
   justify-content: center;
 }
+
 .product-card {
   background: #fff;
   border-radius: 8px;
@@ -69,21 +61,25 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
 .product-image {
   width: 180px;
   height: 180px;
   object-fit: contain;
   margin-bottom: 1rem;
 }
+
 .product-card h2 {
   font-size: 1.1rem;
   margin: 0.5rem 0;
   text-align: center;
 }
+
 .product-card p {
   margin: 0.25rem 0;
   text-align: center;
 }
+
 .product-card button {
   margin-top: 0.5rem;
   padding: 0.5rem 1rem;
@@ -91,7 +87,12 @@ body {
   color: #fff;
   border: none;
   border-radius: 4px;
+  cursor: pointer;
   opacity: 0.7;
+}
+
+.product-card button:hover {
+  opacity: 1;
 }
 
 .cart {
@@ -104,9 +105,11 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
 .cart h2 {
   margin-top: 0;
 }
+
 .cart-item {
   display: flex;
   align-items: center;
@@ -116,9 +119,11 @@ body {
   border-radius: 4px;
   padding: 0.5rem;
 }
+
 .cart-item img {
   border-radius: 4px;
 }
+
 .cart-item button {
   margin-left: auto;
   background: #dc3545;
@@ -126,13 +131,19 @@ body {
   border: none;
   border-radius: 4px;
   padding: 0.3rem 0.7rem;
-
+  cursor: pointer;
 }
+
+.cart-item button:hover {
+  background: #c82333;
+}
+
 .cart-total {
   text-align: right;
   margin-top: 1rem;
   font-size: 1.1rem;
 }
+
 .checkout-btn {
   width: 100%;
   margin-top: 1rem;
@@ -142,8 +153,18 @@ body {
   border-radius: 4px;
   padding: 0.7rem;
   font-size: 1rem;
-
+  cursor: pointer;
 }
+
+.checkout-btn:hover {
+  background: #218838;
+}
+
+.checkout-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
 .checkout-page {
   max-width: 500px;
   margin: 2rem auto;
@@ -153,6 +174,20 @@ body {
   padding: 2rem;
   text-align: center;
 }
+
+.checkout-page h1 {
+  margin-top: 0;
+}
+
+.checkout-page ul {
+  list-style: none;
+  padding: 0;
+}
+
+.checkout-page li {
+  margin-bottom: 1rem;
+}
+
 .checkout-page button {
   margin-top: 2rem;
   background: #007bff;
@@ -161,4 +196,22 @@ body {
   border-radius: 4px;
   padding: 0.7rem 1.5rem;
   font-size: 1rem;
+  cursor: pointer;
+}
+
+.checkout-page button:hover {
+  background: #0056b3;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #dc3545;
+  font-size: 1.2rem;
 }
